@@ -98,7 +98,7 @@ Paypal.prototype.pay = function(invoiceNumber, amount, description, currency, re
 	params.ALLOWNOTE = 1;
 	params.METHOD = 'SetExpressCheckout';
 
-	if (billingType && billingDescription) {
+	if (billingDescription) {
 		params.L_BILLINGTYPE0 = 'RecurringPayments';
 		params.L_BILLINGAGREEMENTDESCRIPTION0 = billingDescription;
 	}
