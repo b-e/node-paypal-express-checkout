@@ -75,7 +75,7 @@ Paypal.prototype.detail = function(token, payer, callback) {
 	return self;
 };
 
-Paypal.prototype.pay = function(invoiceNumber, amount, description, currency, requireAddress, billingType, billingDescription, callback) {//billingType and description are used to mark the token as a "recurring billing token"
+Paypal.prototype.pay = function(invoiceNumber, amount, description, currency, requireAddress, billingDescription, callback) {//billingDescription is used to mark the token as a "recurring billing token"
 
 	// Backward compatibility
 	if (typeof(requireAddress) === 'function') {
@@ -99,7 +99,7 @@ Paypal.prototype.pay = function(invoiceNumber, amount, description, currency, re
 	params.METHOD = 'SetExpressCheckout';
 
 	if (billingType && billingDescription) {
-		params.L_BILLINGTYPE0 = billingType;
+		params.L_BILLINGTYPE0 = 'RecurringPayments';
 		params.L_BILLINGAGREEMENTDESCRIPTION0 = billingDescription;
 	}
 

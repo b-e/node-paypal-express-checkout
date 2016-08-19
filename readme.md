@@ -58,7 +58,7 @@ paypal.detail('EC-788441863R616634K', '9TM892TKTDWCE', function(err, data, invoi
 	}
 
 	// data.success == {Boolean}
-	
+
 	if (data.success)
 		console.log('DONE, PAYMENT IS COMPLETED.');
 	else
@@ -85,6 +85,52 @@ paypal.detail('EC-788441863R616634K', '9TM892TKTDWCE', function(err, data, invoi
 	*/
 
 });
+
+```
+
+## Recurring PAYMENTSTATUS
+To create a recurring payment you need to call the pay function with a new param:
+```js
+paypal.pay('20130001', 123.23, 'iPad', 'EUR', true, 'PRODUCT_NAME', function(err, url) {
+	if (err) {
+		console.log(err);
+		return;
+	}
+
+	// redirect to paypal webpage
+	response.redirect(url);
+});
+```
+
+This allows you to get a "recurring payment token". With this token, you can call
+```js
+paypal.createRecurringPaymentsProfile
+```
+
+after
+
+```js
+paypal.detail
+```
+
+passing in the recurring payment params and a callback. For instance:
+
+```js
+var params = {
+	PROFILESTARTDATE: moment().add(1, 'years').format('YYYY-MM-DDThh:mm:ss'),
+	BILLINGPERIOD: 'Year',
+	BILLINGFREQUENCY: 1,
+	AMT: 10,
+	TOKEN: PaypalTokenYouPreviouslyGotFromPay,
+	CURRENCYCODE: 'EUR',
+	EMAIL: customer@email.it,
+	DESC: 'your amazing product description',
+	L_PAYMENTREQUEST_0_NAME0: 'your amazing product name',
+	L_PAYMENTREQUEST_0_AMT0: 10,
+	L_PAYMENTREQUEST_0_QTY0: 1
+};
+
+paypal.createRecurringPaymentsProfile(params, callback);
 
 ```
 
