@@ -75,7 +75,7 @@ Paypal.prototype.detail = function(token, payer, callback) {
 	return self;
 };
 
-Paypal.prototype.pay = function(invoiceNumber, amount, description, currency, requireAddress, callback) {
+Paypal.prototype.pay = function(invoiceNumber, amount, description, currency, requireAddress, billingType, billingDescription, callback) {//billingType and description are used to mark the token as a "recurring billing token"
 
 	// Backward compatibility
 	if (typeof(requireAddress) === 'function') {
@@ -98,6 +98,11 @@ Paypal.prototype.pay = function(invoiceNumber, amount, description, currency, re
 	params.ALLOWNOTE = 1;
 	params.METHOD = 'SetExpressCheckout';
 
+	if (billingType && billingDescription) {
+		params.L_BILLINGTYPE0 = billingType;
+		params.L_BILLINGAGREEMENTDESCRIPTION0 = billingDescription;
+	}
+
 	self.request(self.url, 'POST', params, function(err, data) {
 
 		if (err)
@@ -110,6 +115,28 @@ Paypal.prototype.pay = function(invoiceNumber, amount, description, currency, re
 	});
 
 	return self;
+};
+
+Paypal.prototype.createRecurringPaymentsProfile = function(userParams, callback) {
+	//userParams are: PROFILESTARTDATE, BILLINGPERIOD, BILLINGFREQUENCY, AMT, TOKEN, CURRENCYCODE, EMAIL, DESC, L_PAYMENTREQUEST_0_NAME0, L_PAYMENTREQUEST_0_AMT0, L_PAYMENTREQUEST_0_QTY0
+
+	var self = this;
+	var params = self.params();
+	params.METHOD = 'CreateRecurringPaymentsProfile';
+	params.L_PAYMENTREQUEST_0_ITEMCATEGORY0 = 'Digital';
+
+	for (param in userParams) {
+		params[param] = userParams[param];
+	}
+
+	self.request(self.url, 'POST', params, function(err, data) {
+		if (err) {
+			callback(err, data);
+			return;
+		}
+
+		callback(null, data);
+	})
 };
 
 Paypal.prototype.request = function(url, method, data, callback) {
