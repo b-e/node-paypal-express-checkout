@@ -88,7 +88,7 @@ paypal.detail('EC-788441863R616634K', '9TM892TKTDWCE', function(err, data, invoi
 
 ```
 
-## Recurring PAYMENTSTATUS
+## Recurring PAYMENTS
 To create a recurring payment you need to call the pay function with a new param:
 ```js
 paypal.pay('20130001', 123.23, 'iPad', 'EUR', true, 'PRODUCT_NAME', function(err, url) {
