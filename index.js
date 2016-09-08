@@ -123,7 +123,7 @@ Paypal.prototype.createRecurringPaymentsProfile = function(userParams, callback)
 	var self = this;
 	var params = self.params();
 	params.METHOD = 'CreateRecurringPaymentsProfile';
-	params.L_PAYMENTREQUEST_0_ITEMCATEGORY0 = 'Digital';
+	//params.L_PAYMENTREQUEST_0_ITEMCATEGORY0 = 'Digital';
 
 	for (param in userParams) {
 		params[param] = userParams[param];
