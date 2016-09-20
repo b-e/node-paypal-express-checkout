@@ -61,10 +61,10 @@ Paypal.prototype.detail = function(token, payer, callback) {
 		params.METHOD = 'DoExpressCheckoutPayment';
 
 		self.request(self.url, 'POST', params, function(err, data) {
-			if (err)
-				return callback(err, data);
+			if (err) return callback(err, data);
 			data.ACK2 = data.ACK;
 			data.ACK = data.PAYMENTINFO_0_ACK; // Backward compatibility
+			if (!data.ACK) return callback(new Error('Generic Error'), null);
 			data.PAYMENTSTATUS = data.PAYMENTINFO_0_PAYMENTSTATUS;
 			var is = (data.PAYMENTINFO_0_PAYMENTSTATUS || '').toLowerCase();
 			data.success = data.ACK.toLowerCase() === 'success' && (is === 'completed' || is === 'processed' || is === 'pending');
